@@ -1,10 +1,10 @@
 {
-  "name": "voluncheer-final-1",
+  "name": "voluncheer-api",
   "version": "1.0.0",
   "description": "",
-  "main": "Projeto-Voluncheer/voluncheer-api/server.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node Projeto-Voluncheer/voluncheer-api/server.js",
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
