@@ -250,6 +250,15 @@
     v = v.replace(/(\d{4})(\d)/, '$1-$2')
     e.target.value = v
   })
+  // Máscara telefone
+  document.getElementById('telefone').addEventListener('input', e => {
+    let v = e.target.value.replace(/\D/g, '').slice(0, 11)
+    if (v.length <= 10)
+      v = v.replace(/^(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3')
+    else
+      v = v.replace(/^(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3')
+    e.target.value = v
+  })
 
   // ── Login ────────────────────────────────────────────────
   async function login() {
