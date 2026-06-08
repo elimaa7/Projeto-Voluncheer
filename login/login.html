@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Voluncheer</title>
+  <link rel="stylesheet" href="stylelog.css" />
+  <link rel="icon" href="../img/favicon.ico">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="container">
+    <div class="logo-container">
+      <img src="../img/login/LOGO-05.png" alt="Logo Voluncheer">
+    </div>
+
+    <!-- ── Já logado ── -->
+    <div id="ja-logado" style="display:none; text-align:center; width:100%">
+      <div id="avatar-logado" style="
+        width:72px;height:72px;border-radius:50%;
+        background:#72A2ED;color:#fff;
+        font-size:30px;font-weight:700;font-family:'Poppins',sans-serif;
+        display:flex;align-items:center;justify-content:center;margin:0 auto 14px;
+      "></div>
+      <h2 id="saudacao" style="margin-bottom:6px"></h2>
+      <p id="tipo-label" style="color:#888;font-size:14px;margin-bottom:24px"></p>
+      <button onclick="window.location.href='../index.html'" style="margin-bottom:10px;width:100%">
+        🏠 Ir para Home
+      </button>
+      <button onclick="fazerLogout()" class="btn-logout" style="width:100%">
+        🚪 Sair da conta
+      </button>
+    </div>
+
+    <!-- ── Login ── -->
+    <div id="login-section">
+      <h2>Login</h2>
+
+      <label for="login-email">Email</label>
+      <input id="login-email" type="text" placeholder="seu@email.com" />
+
+      <label for="login-senha">Senha</label>
+      <div style="position:relative;width:100%">
+        <input id="login-senha" type="password" placeholder="Senha" style="padding-right:42px"/>
+        <span id="toggle-senha" onclick="toggleSenha('login-senha','toggle-senha')"
+          style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:#888;font-size:18px">
+          <i class="bi bi-eye"></i>
+        </span>
+      </div>
+
+      <select id="login-tipo">
+        <option value="voluntario">Voluntário</option>
+        <option value="ong">ONG</option>
+      </select>
+
+      <!-- Mensagem de erro inline -->
+      <div id="login-msg" class="msg-inline" style="display:none"></div>
+
+      <button onclick="login()">Entrar</button>
+      <p class="link" onclick="mostrarCadastro()">Não tem conta? Cadastre-se</p>
+    </div>
+
+    <!-- ── Cadastro ── -->
+    <div id="cadastro-section" style="display:none;">
+      <h2>Cadastro</h2>
+
+      <label for="cad-nome">Nome</label>
+      <input id="cad-nome" type="text" placeholder="Nome completo" />
+
+      <label for="cad-email">Email</label>
+      <input id="cad-email" type="text" placeholder="seu@email.com" />
+
+      <label for="cad-senha">Senha</label>
+      <div style="position:relative;width:100%">
+        <input id="cad-senha" type="password" placeholder="Mínimo 6 caracteres" style="padding-right:42px"/>
+        <span id="toggle-cad-senha" onclick="toggleSenha('cad-senha','toggle-cad-senha')"
+          style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:#888;font-size:18px">
+          <i class="bi bi-eye"></i>
+        </span>
+      </div>
+
+      <select id="cad-tipo">
+        <option value="voluntario">Voluntário</option>
+        <option value="ong">ONG</option>
+      </select>
+
+      <!-- Campos extras de ONG -->
+      <div id="extra-ong" style="display:none; margin-top:10px; width:100%">
+        <label for="cnpj">CNPJ</label>
+        <input id="cnpj" type="text" maxlength="18" placeholder="00.000.000/0000-00" />
+
+        <label for="telefone">Telefone / WhatsApp</label>
+        <input id="telefone" type="tel" placeholder="(99) 99999-9999" />
+
+        <label for="cep">CEP</label>
+        <input id="cep" type="text" placeholder="00000-000" maxlength="9" />
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div>
+            <label for="rua">Rua</label>
+            <input id="rua" type="text" disabled placeholder="Preenchido pelo CEP"/>
+          </div>
+          <div>
+            <label for="bairro">Bairro</label>
+            <input id="bairro" type="text" disabled placeholder="Bairro"/>
+          </div>
+          <div>
+            <label for="cidade">Cidade</label>
+            <input id="cidade" type="text" disabled placeholder="Cidade"/>
+          </div>
+          <div>
+            <label for="estado">Estado</label>
+            <input id="estado" type="text" disabled placeholder="UF"/>
+          </div>
+        </div>
+
+        <label for="ong-area">Área de atuação</label>
+        <input id="ong-area" type="text" placeholder="Ex: Educação, Saúde" />
+
+        <label for="ong-site">Site / Redes sociais</label>
+        <input id="ong-site" type="url" placeholder="https://..." />
+
+        <label for="ong-desc">Descrição da ONG</label>
+        <textarea id="ong-desc" placeholder="Missão ou objetivo da ONG" rows="4"></textarea>
+
+        <label class="checkbox-label" style="margin-top:8px">
+          <input id="ong-autorizado" type="checkbox" />
+          Sou representante autorizado da ONG
+        </label>
+      </div>
+
+      <!-- Mensagem de erro/sucesso inline -->
+      <div id="cad-msg" class="msg-inline" style="display:none"></div>
+
+      <button onclick="cadastrar()" style="margin-top:14px">Cadastrar</button>
+      <p class="link" onclick="mostrarLogin()">Já tem conta? Faça login</p>
+    </div>
+  </div>
+
+<script>
+  const API = 'http://localhost:3000'
+  const AUTH_KEY = 'voluncheer_user'
+
+  // ── Toast ────────────────────────────────────────────────
+  function showToast(msg, tipo = 'info') {
+    let c = document.getElementById('toast-container')
+    if (!c) {
+      c = document.createElement('div')
+      c.id = 'toast-container'
+      c.style.cssText = 'position:fixed;bottom:28px;right:28px;z-index:99999;display:flex;flex-direction:column;gap:10px;font-family:Poppins,sans-serif'
+      document.body.appendChild(c)
+      const s = document.createElement('style')
+      s.textContent = '@keyframes tIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}@keyframes tOut{from{opacity:1}to{opacity:0;transform:translateY(12px)}}'
+      document.head.appendChild(s)
+    }
+    const cores = { success:'#1a7a3c', error:'#c0392b', info:'#1C2567', warning:'#d4720a' }
+    const icons = { success:'✓', error:'✕', info:'ℹ', warning:'⚠' }
+    const t = document.createElement('div')
+    t.style.cssText = `background:${cores[tipo]||cores.info};color:#fff;padding:12px 18px;border-radius:10px;font-size:14px;max-width:300px;box-shadow:0 4px 16px rgba(0,0,0,.25);display:flex;align-items:center;gap:10px;animation:tIn .25s ease`
+    t.innerHTML = `<span style="font-size:18px">${icons[tipo]||'ℹ'}</span><span>${msg}</span>`
+    c.appendChild(t)
+    setTimeout(() => { t.style.animation = 'tOut .3s ease forwards'; setTimeout(() => t.remove(), 300) }, 3500)
+  }
+
+  // ── Mensagem inline (abaixo do form) ─────────────────────
+  function mostrarMsg(id, msg, tipo) {
+    const el = document.getElementById(id)
+    const cores = { success:'#1a7a3c', error:'#c0392b', info:'#1C2567' }
+    el.style.cssText = `display:block;background:${cores[tipo]||'#1C2567'}18;border:1.5px solid ${cores[tipo]||'#1C2567'};
+      color:${cores[tipo]||'#1C2567'};border-radius:8px;padding:10px 14px;font-size:13px;margin-top:10px;text-align:left`
+    el.textContent = msg
+  }
+  function esconderMsg(id) {
+    document.getElementById(id).style.display = 'none'
+  }
+
+  // ── Toggle senha ─────────────────────────────────────────
+  function toggleSenha(inputId, spanId) {
+    const inp = document.getElementById(inputId)
+    const span = document.getElementById(spanId)
+    if (inp.type === 'password') {
+      inp.type = 'text'
+      span.innerHTML = '<i class="bi bi-eye-slash"></i>'
+    } else {
+      inp.type = 'password'
+      span.innerHTML = '<i class="bi bi-eye"></i>'
+    }
+  }
+
+  // ── Verificar se já está logado ──────────────────────────
+  function verificarSessao() {
+    const user = JSON.parse(localStorage.getItem(AUTH_KEY) || 'null')
+    if (user) {
+      document.getElementById('login-section').style.display = 'none'
+      document.getElementById('cadastro-section').style.display = 'none'
+      document.getElementById('ja-logado').style.display = 'block'
+      document.getElementById('avatar-logado').textContent = user.nome.charAt(0).toUpperCase()
+      document.getElementById('saudacao').textContent = `Olá, ${user.nome}!`
+      document.getElementById('tipo-label').textContent = `Logado como ${user.tipo === 'ong' ? 'ONG' : 'Voluntário'}`
+    }
+  }
+
+  function fazerLogout() {
+    localStorage.removeItem(AUTH_KEY)
+    showToast('Você saiu da conta.', 'info')
+    setTimeout(() => location.reload(), 1200)
+  }
+
+  // ── Alternar seções ──────────────────────────────────────
+  function mostrarCadastro() {
+    document.getElementById('login-section').style.display = 'none'
+    document.getElementById('cadastro-section').style.display = 'block'
+    esconderMsg('cad-msg')
+  }
+  function mostrarLogin() {
+    document.getElementById('cadastro-section').style.display = 'none'
+    document.getElementById('login-section').style.display = 'block'
+    esconderMsg('login-msg')
+  }
+
+  // ── Tipo ONG mostra campos extras ────────────────────────
+  document.getElementById('cad-tipo').addEventListener('change', function () {
+    document.getElementById('extra-ong').style.display = this.value === 'ong' ? 'block' : 'none'
+  })
+
+  // ── CEP ─────────────────────────────────────────────────
+  document.getElementById('cep').addEventListener('blur', async function () {
+    const cep = this.value.replace(/\D/g, '')
+    if (cep.length !== 8) return
+    try {
+      const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
+      const d = await r.json()
+      if (d.erro) { mostrarMsg('cad-msg', 'CEP não encontrado.', 'error'); return }
+      document.getElementById('rua').value = d.logradouro
+      document.getElementById('bairro').value = d.bairro
+      document.getElementById('cidade').value = d.localidade
+      document.getElementById('estado').value = d.uf
+      esconderMsg('cad-msg')
+    } catch { mostrarMsg('cad-msg', 'Erro ao consultar CEP.', 'error') }
+  })
+
+  // Máscara CNPJ
+  document.getElementById('cnpj').addEventListener('input', e => {
+    let v = e.target.value.replace(/\D/g, '').slice(0, 14)
+    v = v.replace(/^(\d{2})(\d)/, '$1.$2')
+    v = v.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+    v = v.replace(/\.(\d{3})(\d)/, '.$1/$2')
+    v = v.replace(/(\d{4})(\d)/, '$1-$2')
+    e.target.value = v
+  })
+
+  // ── Login ────────────────────────────────────────────────
+  async function login() {
+    esconderMsg('login-msg')
+    const email = document.getElementById('login-email').value.trim()
+    const senha = document.getElementById('login-senha').value
+    const tipo  = document.getElementById('login-tipo').value
+
+    if (!email || !senha) {
+      mostrarMsg('login-msg', 'Preencha email e senha.', 'error')
+      return
+    }
+
+    try {
+      const res = await fetch(`${API}/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, senha, tipo })
+      })
+      const dados = await res.json()
+      if (res.ok) {
+        // Salva com senha para reuso no painel ONG (sem expor externamente)
+        localStorage.setItem(AUTH_KEY, JSON.stringify({ ...dados.user, _senha: senha }))
+        showToast(`Bem-vindo, ${dados.user.nome}!`, 'success')
+        setTimeout(() => { window.location.href = '../index.html' }, 1300)
+      } else {
+        mostrarMsg('login-msg', dados.message || 'Email, senha ou tipo incorretos.', 'error')
+      }
+    } catch {
+      mostrarMsg('login-msg', 'Erro ao conectar com o servidor. Verifique se ele está rodando.', 'error')
+    }
+  }
+
+  // ── Cadastro ─────────────────────────────────────────────
+  async function cadastrar() {
+    esconderMsg('cad-msg')
+    const nome  = document.getElementById('cad-nome').value.trim()
+    const email = document.getElementById('cad-email').value.trim()
+    const senha = document.getElementById('cad-senha').value
+    const tipo  = document.getElementById('cad-tipo').value
+
+    if (!nome || nome.length < 2) {
+      mostrarMsg('cad-msg', 'Nome deve ter pelo menos 2 caracteres.', 'error'); return
+    }
+    if (!email || !email.includes('@')) {
+      mostrarMsg('cad-msg', 'Digite um e-mail válido.', 'error'); return
+    }
+    if (!senha || senha.length < 6) {
+      mostrarMsg('cad-msg', 'Senha deve ter pelo menos 6 caracteres.', 'error'); return
+    }
+
+    let dadosExtras = {}
+    if (tipo === 'ong') {
+      dadosExtras = {
+        cnpj:     document.getElementById('cnpj').value,
+        telefone: document.getElementById('telefone').value,
+        cep:      document.getElementById('cep').value,
+        area:     document.getElementById('ong-area').value,
+        site:     document.getElementById('ong-site').value,
+        descricao:document.getElementById('ong-desc').value
+      }
+    }
+
+    try {
+      const res = await fetch(`${API}/cadastrar`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome, email, senha, tipo, ...dadosExtras })
+      })
+      const dados = await res.json()
+      if (res.ok) {
+        mostrarMsg('cad-msg', 'Cadastro realizado! Faça seu login.', 'success')
+        setTimeout(mostrarLogin, 1800)
+      } else {
+        mostrarMsg('cad-msg', dados.message || 'Erro ao cadastrar.', 'error')
+      }
+    } catch {
+      mostrarMsg('cad-msg', 'Erro ao conectar com o servidor.', 'error')
+    }
+  }
+
+  // Enter no login
+  document.getElementById('login-senha').addEventListener('keydown', e => {
+    if (e.key === 'Enter') login()
+  })
+
+  verificarSessao()
+</script>
+
+</body>
+</html>
+

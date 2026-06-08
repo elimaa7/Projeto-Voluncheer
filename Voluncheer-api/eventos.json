@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "ongId": 99,
+    "ongNome": "ONG Cuidar é Viver",
+    "titulo": "Mutirão pela Vida",
+    "descricao": "Um mutirão de saúde e acolhimento! Durante o Dia do Cuidado Comunitário, oferecemos atendimento médico e psicológico gratuito, vacinação, testes rápidos, rodas de conversa sobre saúde mental e atividades para idosos, mulheres e jovens. É a comunidade cuidando de si mesma, com amor e informação.",
+    "data": "2025-06-21",
+    "horario": "06h às 11h",
+    "categoria": "saude",
+    "imagem": "../img/home/filtro/saudef.png",
+    "criadoEm": "2025-06-01T10:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "ongId": 98,
+    "ongNome": "ONG Garras do Bem",
+    "titulo": "Feirinha de Patas",
+    "descricao": "Um sábado especial para adotar, amar e ajudar! A Feirinha de Patas reúne animais resgatados prontos para encontrar um novo lar, além de contar com venda de produtos pet, oficinas educativas para crianças, arrecadação de ração e um bate-papo com veterinários e protetores. Traga sua família (inclusive a de quatro patas)!",
+    "data": "2025-06-21",
+    "horario": "08h às 11h",
+    "categoria": "animais",
+    "imagem": "../img/home/filtro/animaisf.png",
+    "criadoEm": "2025-06-01T11:00:00.000Z"
+  },
+  {
+    "id": 3,
+    "ongId": 97,
+    "ongNome": "ONG Barriga Cheia",
+    "titulo": "Banquete Popular Semanal",
+    "descricao": "Uma grande mesa no coração da cidade. A Cozinha Solidária na Praça serve refeições quentes e nutritivas para pessoas em situação de vulnerabilidade, com o apoio de chefs voluntários e moradores locais. Além da comida, o evento oferece cortes de cabelo, atividades culturais e escuta ativa — porque dignidade também se serve com afeto.",
+    "data": "2025-06-22",
+    "horario": "19h",
+    "categoria": "comida",
+    "imagem": "../img/home/filtro/comidaf.png",
+    "criadoEm": "2025-06-01T12:00:00.000Z"
+  },
+  {
+    "ongId": 17,
+    "ongNome": "ONG teste",
+    "titulo": "Título",
+    "descricao": "descrição",
+    "data": "2026-06-20",
+    "horario": "09h às 13h",
+    "categoria": "saude",
+    "imagem": "../img/home/filtro/saudef.png",
+    "id": 4,
+    "criadoEm": "2026-06-07T03:39:00.285Z"
+  }
+]

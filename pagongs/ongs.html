@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ONG'S - Voluncheer</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="ongstyle.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="../img/favicon.ico">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    /* ─── Painel ONG ─────────────────────────────── */
+    .ong-painel {
+      max-width: 760px;
+      margin: 28px auto 0;
+      background: #f0f5ff;
+      border: 1.5px solid #72A2ED;
+      border-radius: 12px;
+      padding: 22px 28px;
+      font-family: 'Poppins', sans-serif;
+    }
+    .ong-painel h3 { color: #1C2567; font-size: 17px; font-weight: 600; margin-bottom: 14px; }
+    .ong-painel label { font-size: 13px; color: #444; display: block; margin-bottom: 3px; margin-top: 10px; }
+    .ong-painel input,
+    .ong-painel select,
+    .ong-painel textarea {
+      width: 100%; border: 1.5px solid #72A2ED; border-radius: 7px;
+      padding: 8px 12px; font-family: 'Poppins', sans-serif; font-size: 13px; outline: none;
+    }
+    .ong-painel input:focus, .ong-painel select:focus, .ong-painel textarea:focus {
+      border-color: #1C2567; box-shadow: 0 0 0 3px rgba(28,37,103,.1);
+    }
+    .ong-painel textarea { resize: vertical; min-height: 80px; }
+    .ong-painel .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .btn-postar {
+      margin-top: 14px; background: #1C2567; color: #fff; border: none;
+      border-radius: 8px; padding: 9px 24px; font-family: 'Poppins', sans-serif;
+      font-size: 14px; cursor: pointer; transition: background .2s;
+    }
+    .btn-postar:hover { background: #2e3d9e; }
+    .btn-sair {
+      background: none; border: 1.5px solid #1C2567; border-radius: 8px;
+      padding: 5px 14px; font-size: 12px; color: #1C2567; cursor: pointer; float: right;
+      font-family: 'Poppins', sans-serif; transition: all .2s;
+    }
+    .btn-sair:hover { background: #1C2567; color: #fff; }
+    .msg-painel {
+      border-radius: 8px; padding: 9px 14px; font-size: 13px; margin-top: 10px;
+      font-family: 'Poppins', sans-serif; display: none;
+    }
+    .msg-painel.ok { background: #e8f8ee; border: 1.5px solid #1a7a3c; color: #1a7a3c; }
+    .msg-painel.erro { background: #fdf0ef; border: 1.5px solid #c0392b; color: #c0392b; }
+
+    /* ─── Box "Entre como ONG" ─── */
+    .ong-login-box {
+      max-width: 760px; margin: 28px auto 0; background: #fff8f0;
+      border: 1.5px solid #f0a830; border-radius: 12px; padding: 18px 28px;
+      font-family: 'Poppins', sans-serif;
+    }
+    .ong-login-box p { color: #555; font-size: 14px; margin-bottom: 0; }
+    .btn-ir-login {
+      margin-top: 12px; background: #1C2567; color: #fff; border: none;
+      border-radius: 8px; padding: 9px 22px; font-family: 'Poppins', sans-serif;
+      font-size: 14px; cursor: pointer; text-decoration: none; display: inline-block;
+    }
+    .btn-ir-login:hover { background: #2e3d9e; color: #fff; }
+
+    /* ─── Eventos ─── */
+    .btn-apagar {
+      background: none; border: 1px solid #c0392b; color: #c0392b; border-radius: 6px;
+      padding: 4px 10px; font-size: 12px; cursor: pointer; margin-left: 10px;
+      font-family: 'Poppins', sans-serif; flex-shrink: 0;
+    }
+    .btn-apagar:hover { background: #c0392b; color: #fff; }
+    .evento-header-row { display: flex; justify-content: space-between; align-items: flex-start; }
+    .loading-msg { text-align: center; color: #888; font-family: 'Poppins', sans-serif; font-size: 14px; padding: 30px; }
+    .sem-eventos { text-align: center; color: #aaa; font-size: 14px; font-family: 'Poppins', sans-serif; padding: 30px; }
+    .eventos-ongs-item { cursor: pointer; }
+
+    /* ─── Confirm modal ─── */
+    #confirm-overlay {
+      display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);
+      z-index:99998;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;
+    }
+    #confirm-overlay.ativo { display:flex; }
+    #confirm-box {
+      background:#fff;border-radius:14px;padding:28px 32px;
+      max-width:340px;width:90%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.2);
+    }
+    #confirm-box p { color:#1C2567;font-size:15px;font-weight:600;margin-bottom:20px; }
+    #confirm-box .btn-row { display:flex;gap:12px;justify-content:center; }
+    #confirm-nao {
+      padding:8px 24px;border-radius:8px;border:1.5px solid #ccc;
+      background:#fff;color:#555;font-size:13px;cursor:pointer;font-family:'Poppins',sans-serif;
+    }
+    #confirm-sim {
+      padding:8px 24px;border-radius:8px;border:none;
+      background:#c0392b;color:#fff;font-size:13px;cursor:pointer;font-family:'Poppins',sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <!-- Confirm modal reutilizável -->
+  <div id="confirm-overlay">
+    <div id="confirm-box">
+      <p id="confirm-msg">Deseja apagar este evento?</p>
+      <div class="btn-row">
+        <button id="confirm-nao">Cancelar</button>
+        <button id="confirm-sim">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="PrimeiroFundo">
+    <header class="headerclass">
+      <div class="titulo">
+        <a href="../index.html"><img src="../img/LOGO-09.png" alt="Logo Voluncheer"></a>
+      </div>
+      <button class="hamburger-btn" id="hamburgerBtn" aria-label="Abrir menu">
+        <i class="bi bi-list"></i>
+      </button>
+      <div class="menu-content" id="menuContent">
+        <nav class="opcoes">
+          <ul>
+            <li><a href="../index.html">HOME</a></li>
+            <li><a href="../pagsobre/sobre.html">SOBRE</a></li>
+            <li><a href="../pagongs/ongs.html">ONG'S</a></li>
+            <li><a href="../pagcontato/contatos.html">CONTATO</a></li>
+          </ul>
+        </nav>
+        <div class="perfil">
+          <!-- Preenchido pelo auth.js -->
+          <a href="../login/login.html">
+            <button><i class="bi bi-person"></i></button>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <div class="carousel-desktop">
+      <div id="carouselExampleRide" class="carousel slide" data-bs-ride="true">
+        <div class="carousel-inner">
+          <div class="carousel-item active"><img src="../img/carousel/baseongs5.png" class="d-block w-100" alt="Home"></div>
+          <div class="carousel-item"><img src="../img/carousel/sombra/reciclagemf.png" class="d-block w-100" alt="Reciclagem"></div>
+          <div class="carousel-item"><img src="../img/carousel/sombra/idososf.png" class="d-block w-100" alt="Idosos"></div>
+          <div class="carousel-item"><img src="../img/carousel/sombra/animaisf.png" class="d-block w-100" alt="Animais"></div>
+          <div class="carousel-item"><img src="../img/carousel/sombra/comidaf.png" class="d-block w-100" alt="Comida"></div>
+          <div class="carousel-item"><img src="../img/carousel/sombra/coletaf.png" class="d-block w-100" alt="Coleta"></div>
+          <div class="carousel-item"><img src="../img/carousel/sombra/saudef.png" class="d-block w-100" alt="Saúde"></div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
+      </div>
+    </div>
+    <div class="carousel-mobile">
+      <img class="banner-mobile" src="../img/carousel/basemobileongs.png" alt="Banner Mobile">
+    </div>
+  </section>
+
+  <section class="search-container-ongs">
+    <div class="search-bar">
+      <input type="text" id="campoBusca" placeholder="Pesquisar eventos...">
+      <button type="button" id="btnBusca"><img src="../img/lupa.png" alt="Buscar" class="lupa-icon"></button>
+    </div>
+  </section>
+
+  <!-- Painel ONG / aviso de login -->
+  <div id="areaONG" style="padding: 0 16px;"></div>
+
+  <main class="conteudo-container">
+    <section class="prox-eventos">
+      <h2 class="txteventos">Próximos Eventos</h2>
+      <div id="listaEventos"><p class="loading-msg">Carregando eventos...</p></div>
+    </section>
+  </main>
+
+  <footer>
+    <section class="footer-container">
+      <div class="logo-voluncheer"><a href="../index.html"><img src="../img/LOGO-02.png" alt=""></a></div>
+      <div class="social-logos">
+        <a href="https://www.facebook.com/?locale=pt_BR" target="_blank"><i class="bi bi-facebook"></i></a>
+        <a href="https://www.youtube.com/" target="_blank"><i class="bi bi-youtube"></i></a>
+        <a href="https://www.instagram.com/" target="_blank"><i class="bi bi-instagram"></i></a>
+      </div>
+      <div class="footer-column">
+        <h4>Menu</h4>
+        <ul class="footer-links">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../pagsobre/sobre.html">Sobre</a></li>
+          <li><a href="../pagongs/ongs.html">ONG's</a></li>
+          <li><a href="../pagcontato/contatos.html">Contato</a></li>
+        </ul>
+      </div>
+    </section>
+    <div class="footer-bottom"><p>&copy; 2025 Voluncheer. Todos os direitos reservados.</p></div>
+  </footer>
+
+  <script src="../auth.js"></script>
+  <script src="ong.js"></script>
+  <script>
+    const API = 'http://localhost:3000'
+
+    // ── Confirm estilizado ────────────────────────────────
+    let confirmResolve = null
+    document.getElementById('confirm-sim').onclick = () => {
+      document.getElementById('confirm-overlay').classList.remove('ativo')
+      if (confirmResolve) confirmResolve(true)
+    }
+    document.getElementById('confirm-nao').onclick = () => {
+      document.getElementById('confirm-overlay').classList.remove('ativo')
+      if (confirmResolve) confirmResolve(false)
+    }
+    function confirmar(msg) {
+      document.getElementById('confirm-msg').textContent = msg
+      document.getElementById('confirm-overlay').classList.add('ativo')
+      return new Promise(r => { confirmResolve = r })
+    }
+
+    // ── Painel ONG ────────────────────────────────────────
+    function renderAreaONG() {
+      const area = document.getElementById('areaONG')
+      const user = Auth.getUser()
+
+      if (!user) {
+        // Não logado — mostra convite
+        area.innerHTML = `
+          <div class="ong-login-box">
+            <p><strong>É uma ONG?</strong> Faça login para postar e gerenciar seus eventos.</p>
+            <a href="../login/login.html" class="btn-ir-login">Fazer Login</a>
+          </div>`
+        return
+      }
+
+      if (user.tipo !== 'ong') {
+        // Voluntário logado — não mostra painel de postagem
+        area.innerHTML = ''
+        return
+      }
+
+      // ONG logada — mostra painel completo
+      area.innerHTML = `
+        <div class="ong-painel">
+          <h3>
+            Publicar Evento — <span style="color:#72A2ED">${user.nome}</span>
+          </h3>
+          <label>Título *</label>
+          <input type="text" id="evTitulo" placeholder="Ex: Mutirão de limpeza">
+          <label>Descrição *</label>
+          <textarea id="evDescricao" placeholder="Descreva o evento..."></textarea>
+          <div class="row-2">
+            <div>
+              <label>Data *</label>
+              <input type="date" id="evData">
+            </div>
+            <div>
+              <label>Horário *</label>
+              <input type="text" id="evHorario" placeholder="Ex: 09h às 12h">
+            </div>
+          </div>
+          <label>Categoria *</label>
+          <select id="evCategoria">
+            <option value="">Selecione...</option>
+            <option value="saude">Saúde</option>
+            <option value="animais">Animais</option>
+            <option value="comida">Combate à Fome</option>
+            <option value="idosos">Idosos</option>
+            <option value="reciclagem">Reciclagem</option>
+            <option value="coleta">Coleta de Lixo</option>
+          </select>
+          <button class="btn-postar" id="btnPostar">Publicar Evento</button>
+          <div class="msg-painel" id="msgPainel"></div>
+        </div>`
+
+      document.getElementById('btnPostar').addEventListener('click', postarEvento)
+    }
+
+    function mostrarMsgPainel(msg, tipo) {
+      const el = document.getElementById('msgPainel')
+      if (!el) return
+      el.textContent = msg
+      el.className = `msg-painel ${tipo}`
+      el.style.display = 'block'
+      if (tipo === 'ok') setTimeout(() => { el.style.display = 'none' }, 4000)
+    }
+
+    // ── Postar evento ─────────────────────────────────────
+    async function postarEvento() {
+      const user = Auth.getUser()
+      const titulo    = document.getElementById('evTitulo').value.trim()
+      const descricao = document.getElementById('evDescricao').value.trim()
+      const data      = document.getElementById('evData').value
+      const horario   = document.getElementById('evHorario').value.trim()
+      const categoria = document.getElementById('evCategoria').value
+
+      if (!titulo || !descricao || !data || !horario || !categoria) {
+        mostrarMsgPainel('Preencha todos os campos obrigatórios.', 'erro')
+        return
+      }
+
+      try {
+        const res = await fetch(`${API}/eventos`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'ong_email': user.email,
+            'ong_senha': user._senha || user.senha
+          },
+          body: JSON.stringify({ titulo, descricao, data, horario, categoria })
+        })
+        const result = await res.json()
+        if (res.ok) {
+          mostrarMsgPainel('✓ Evento publicado com sucesso!', 'ok')
+          document.getElementById('evTitulo').value = ''
+          document.getElementById('evDescricao').value = ''
+          document.getElementById('evData').value = ''
+          document.getElementById('evHorario').value = ''
+          document.getElementById('evCategoria').value = ''
+          carregarEventos()
+        } else {
+          mostrarMsgPainel(result.message || 'Erro ao publicar.', 'erro')
+        }
+      } catch {
+        mostrarMsgPainel('Erro de conexão com o servidor.', 'erro')
+      }
+    }
+
+    // ── Apagar evento ─────────────────────────────────────
+    async function apagarEvento(id) {
+      const ok = await confirmar('Deseja realmente apagar este evento?')
+      if (!ok) return
+
+      const user = Auth.getUser()
+      try {
+        const res = await fetch(`${API}/eventos/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'ong_email': user.email,
+            'ong_senha': user._senha || user.senha
+          }
+        })
+        if (res.ok) {
+          showToast('Evento apagado.', 'success')
+          carregarEventos()
+        } else {
+          const d = await res.json()
+          showToast(d.message || 'Erro ao apagar.', 'error')
+        }
+      } catch {
+        showToast('Erro de conexão.', 'error')
+      }
+    }
+
+    // ── Carregar eventos ──────────────────────────────────
+    let todosEventos = []
+
+    async function carregarEventos() {
+      const lista = document.getElementById('listaEventos')
+      lista.innerHTML = '<p class="loading-msg">Carregando eventos...</p>'
+      try {
+        const res = await fetch(`${API}/eventos`)
+        todosEventos = await res.json()
+        renderEventos(todosEventos)
+      } catch {
+        lista.innerHTML = '<p class="loading-msg" style="color:#c0392b">Servidor offline. Rode <code>node server.js</code> na pasta src/.</p>'
+      }
+    }
+
+    function formatarData(d) {
+      const [y,m,dia] = d.split('-')
+      return `${dia}/${m}/${y}`
+    }
+
+    function renderEventos(eventos) {
+      const lista = document.getElementById('listaEventos')
+      const user  = Auth.getUser()
+
+      if (!eventos || eventos.length === 0) {
+        lista.innerHTML = '<p class="sem-eventos">Nenhum evento encontrado.</p>'
+        return
+      }
+
+      lista.innerHTML = eventos.map(ev => {
+        const meu = user && ev.ongId === user.id
+        const btnApagar = meu
+          ? `<button class="btn-apagar" onclick="event.stopPropagation(); apagarEvento(${ev.id})">
+               <i class="bi bi-trash"></i> Apagar
+             </button>`
+          : ''
+        return `
+          <p class="txteventos2" style="padding-top:14px">${formatarData(ev.data)} — ${ev.horario}</p>
+          <article class="eventos-ongs-item" onclick="window.location.href='evento.html?id=${ev.id}'">
+            <img src="${ev.imagem}" alt="${ev.titulo}" onerror="this.src='../img/home/filtro/saudef.png'">
+            <div class="eventos-ongs-conteudo">
+              <div class="evento-header-row">
+                <h3>${ev.ongNome} — ${ev.titulo}</h3>
+                ${btnApagar}
+              </div>
+              <h4>${ev.descricao}</h4>
+            </div>
+          </article>`
+      }).join('')
+    }
+
+    // ── Busca ─────────────────────────────────────────────
+    document.getElementById('btnBusca').addEventListener('click', filtrar)
+    document.getElementById('campoBusca').addEventListener('keydown', e => {
+      if (e.key === 'Enter') filtrar()
+    })
+    function filtrar() {
+      const q = document.getElementById('campoBusca').value.trim().toLowerCase()
+      if (!q) { renderEventos(todosEventos); return }
+      renderEventos(todosEventos.filter(ev =>
+        ev.titulo.toLowerCase().includes(q) ||
+        ev.descricao.toLowerCase().includes(q) ||
+        ev.ongNome.toLowerCase().includes(q) ||
+        ev.categoria.toLowerCase().includes(q)
+      ))
+    }
+
+    // ── Init ──────────────────────────────────────────────
+    renderAreaONG()
+
+    // Lê ?busca= vindo da home e pré-preenche a busca
+    const urlParams = new URLSearchParams(window.location.search)
+    const buscaURL  = urlParams.get('busca')
+    if (buscaURL) {
+      document.getElementById('campoBusca').value = buscaURL
+    }
+
+    // Carrega e aplica filtro se vier da home
+    carregarEventos().then(() => {
+      if (buscaURL) filtrar()
+    })
+  </script>
+</body>
+</html>
