@@ -186,7 +186,7 @@
     async function carregarEventosCat() {
       const lista = document.getElementById('listaEventosCat')
       try {
-        const res = await fetch('http://localhost:3000/eventos')
+        const res = await fetch('https://projeto-voluncheer-production-db39.up.railway.app/eventos')
         const todos = await res.json()
         const filtrados = todos.filter(e => e.categoria === 'idosos')
         if (!filtrados.length) {
